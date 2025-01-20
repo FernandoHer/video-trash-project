@@ -11,10 +11,10 @@ export class VideoComponent implements OnInit {
   }
  isEditing: boolean = false;
   videoSegments = [
-    { active: false, src: 'assets/video1.mp4', videoEnded: false, showMessage: false },
-    { active: false, src: 'assets/video2.mp4', videoEnded: false, showMessage: false },
-    { active: false, src: 'assets/video3.mp4', videoEnded: false, showMessage: false },
-    { active: false, src: 'assets/video4.mp4', videoEnded: false, showMessage: false },
+    { active: false, src: 'assets/video1.mp4', videoEnded: false, showMessage: false, message: 'Gracias por ayudar a mejorar el mundo' },
+    { active: false, src: 'assets/video2.mp4', videoEnded: false, showMessage: false, message: 'Gracias por tu colaboración' },
+    { active: false, src: 'assets/video3.mp4', videoEnded: false, showMessage: false, message: 'Gracias el mundo te lo agradece' },
+    { active: false, src: 'assets/video4.mp4', videoEnded: false, showMessage: false, message: 'Gracias ' },
   ];
 
   // Evento para cuando termina el video inicial
