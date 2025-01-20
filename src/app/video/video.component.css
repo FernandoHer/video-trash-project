@@ -1,0 +1,64 @@
+/* Contenedor principal del video inicial */
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* Fondo más bajo para que los otros elementos puedan estar encima */
+}
+
+.fullscreen-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Grid Container: Estructura para superposición */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Divide en 4 columnas iguales */
+    grid-template-rows: 1fr;              /* Una sola fila */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Encima del video inicial */
+}
+
+/* Segmentos de Video */
+.video-segment {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*background: transparent !important;  Asegúrate de que los segmentos inactivos no tengan un fondo blanco */
+}
+
+/* Video de los segmentos */
+.segment-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 3; /* Los videos de los segmentos deben estar encima del video inicial */
+}
+
+/* Mensajes */
+.message {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo negro semitransparente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    z-index: 4; /* El mensaje debe estar encima del video del segmento */
+}
