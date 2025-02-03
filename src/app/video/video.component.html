@@ -1,33 +1,25 @@
 <div class="video-container">
-    <!--<video #mainVideo autoplay loop muted class="fullscreen-video" *ngIf="!isEditing">-->
-    <video #mainVideo autoplay loop muted class="fullscreen-video" >
-      <source src="assets/main-video.mp4" type="video/mp4" />
+ 
+  <img *ngIf="showImage" src="assets/usfq-image.png" class="fullscreen-image" />
+
+
+  <video #mainVideo autoplay loop muted class="fullscreen-video" *ngIf="!showImage && !isEditing">
+    <source src="assets/main-video.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+<div class="grid-container" *ngIf="isEditing">
+  <div class="video-segment" *ngFor="let segment of videoSegments; let i = index" [class.active]="segment.active" [class.inactive]="!segment.active">
+    <!-- Video de los segmentos -->
+    <video *ngIf="segment.active" autoplay muted (ended)="onSegmentVideoEnd(i)" class="segment-video">
+      <source [src]="segment.src" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
-  </div>
-  
-  <div class="grid-container" *ngIf="isEditing">
-    <div
-      class="video-segment"
-      *ngFor="let segment of videoSegments; let i = index"
-      [class.active]="segment.active"
-    >
-      <!-- Video de los segmentos -->
-      <video
-        *ngIf="segment.active"
-        autoplay
-        muted
-        (ended)="onSegmentVideoEnd(i)"
-        class="segment-video"
-      >
-        <source [src]="segment.src" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-  
-      <!-- Mensaje con fondo negro -->
-      <div class="message" *ngIf="segment.showMessage">
-        {{ segment.message }}
-      </div>
+
+    <!-- Mensaje con fondo negro -->
+    <div class="message" *ngIf="segment.showMessage">
+      {{ segment.message }}
     </div>
   </div>
-  
+</div>

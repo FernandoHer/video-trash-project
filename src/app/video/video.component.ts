@@ -6,16 +6,29 @@ import { Component, HostListener, OnInit } from '@angular/core';
   styleUrls: ['./video.component.css']
 })
 export class VideoComponent implements OnInit {
-  ngOnInit(): void {
-   
-  }
+ 
  isEditing: boolean = false;
+ showImage: boolean = true;
+
   videoSegments = [
     { active: false, src: 'assets/video1.mp4', videoEnded: false, showMessage: false, message: 'Gracias por ayudar a mejorar el mundo' },
     { active: false, src: 'assets/video2.mp4', videoEnded: false, showMessage: false, message: 'Gracias por tu colaboración' },
     { active: false, src: 'assets/video3.mp4', videoEnded: false, showMessage: false, message: 'Gracias el mundo te lo agradece' },
     { active: false, src: 'assets/video4.mp4', videoEnded: false, showMessage: false, message: 'Gracias ' },
   ];
+
+  ngOnInit(): void {
+   this.showInitialImage();
+  }
+
+  showInitialImage() {
+    this.showImage = true;
+    this.isEditing = false;
+    setTimeout(() => {
+      this.showImage = false;
+    }, 10000); // 10 segundos
+   
+  }
 
   // Evento para cuando termina el video inicial
   onVideoEnd() {
@@ -43,7 +56,10 @@ export class VideoComponent implements OnInit {
     const noActiveMessages = this.videoSegments.every(segment => !segment.showMessage);
 
     if (noActiveVideos && noActiveMessages) {
-      this.resetState();
+      this.showInitialImage(); // Mostrar imagen 10 seg
+      setTimeout(() => {
+        this.resetState(); // Volver al video inicial
+      }, 10000); 
     }
   }
 

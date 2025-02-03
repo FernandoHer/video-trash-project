@@ -1,11 +1,24 @@
+/* Imagen en pantalla completa */
+.fullscreen-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1; /* Detrás del video */
+  }
+  
+
 /* Contenedor principal del video inicial */
+
 .video-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0; /* Fondo más bajo para que los otros elementos puedan estar encima */
+    z-index: 1; /* Fondo más bajo para que los otros elementos puedan estar encima */
 }
 
 .fullscreen-video {
@@ -24,7 +37,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; /* Encima del video inicial */
+    z-index: 2; /* Encima del video inicial */
 }
 
 /* Segmentos de Video */
@@ -33,8 +46,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /*background: transparent !important;  Asegúrate de que los segmentos inactivos no tengan un fondo blanco */
+    /*background: black !important;  Asegúrate de que los segmentos inactivos no tengan un fondo blanco */
 }
+
+.video-segment.inactive {
+    background-color: black;
+  }
 
 /* Video de los segmentos */
 .segment-video {
