@@ -1,74 +1,62 @@
-/* Imagen en pantalla completa */
-.fullscreen-image {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 1; /* Detrás del video */
-  }
-  
-
-/* Contenedor principal del video inicial */
-
 .video-container {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1; /* Fondo más bajo para que los otros elementos puedan estar encima */
-}
-
-.fullscreen-video {
+    z-index: 1;
+  }
+  
+  .fullscreen-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-/* Grid Container: Estructura para superposición */
-.grid-container {
+  }
+  
+  .fullscreen-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .grid-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Divide en 4 columnas iguales */
-    grid-template-rows: 1fr;              /* Una sola fila */
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2; /* Encima del video inicial */
-}
-
-/* Segmentos de Video */
-.video-segment {
+    z-index: 2;
+  }
+  
+  .video-segment {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    /*background: black !important;  Asegúrate de que los segmentos inactivos no tengan un fondo blanco */
-}
-
-.video-segment.inactive {
-    background-color: black;
   }
-
-/* Video de los segmentos */
-.segment-video {
+  
+  .segment-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 3; /* Los videos de los segmentos deben estar encima del video inicial */
-}
-
-/* Mensajes */
-.message {
+  }
+  
+  .segment-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .message {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo negro semitransparente */
+    background-color: rgba(0, 0, 0, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -77,5 +65,6 @@
     font-weight: bold;
     text-align: center;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    z-index: 4; /* El mensaje debe estar encima del video del segmento */
-}
+    z-index: 4;
+  }
+  
