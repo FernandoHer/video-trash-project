@@ -1,108 +1,107 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-video',
   templateUrl: './video.component.html',
-  styleUrls: ['./video.component.css']
+  styleUrls: ['./video.component.css'],
+
 })
 export class VideoComponent implements OnInit {
 
-  showInitialImage: boolean = true; // Imagen principal al inicio
-  showInitialVideo: boolean = false; // Video principal después de la imagen
-  isEditing: boolean = false; // Control de segmentos activos
-
+  showInitialImage: boolean = true;
+  isEditing: boolean = false;
   videoSegments = [
-    { active: false, src: 'assets/video1.mp4', videoEnded: false, showMessage: false, showImage: false, imageSrc: 'assets/reciclaje1.jpeg', message: 'Gracias por ayudar a mejorar el mundo' },
-    { active: false, src: 'assets/video2.mp4', videoEnded: false, showMessage: false, showImage: false, imageSrc: 'assets/reciclaje2.jpeg', message: 'Gracias por tu colaboración' },
-    { active: false, src: 'assets/video3.mp4', videoEnded: false, showMessage: false, showImage: false, imageSrc: 'assets/reciclaje3.jpeg', message: 'Gracias el mundo te lo agradece' },
-    { active: false, src: 'assets/video4.mp4', videoEnded: false, showMessage: false, showImage: false, imageSrc: 'assets/reciclaje4.jpeg', message: 'Gracias' },
+    { id: 1, active: false, src: 'assets/video1.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: 'assets/image1.jpeg', title: '', message: '' },
+    { id: 2, active: false, src: 'assets/video2.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: 'assets/image2.jpeg', title: '', message: '' },
+    { id: 3, active: false, src: 'assets/video3.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: 'assets/image3.jpeg', title: '', message: '' },
+    { id: 4, active: false, src: 'assets/video4.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: 'assets/image4.jpeg', title: '', message: '' }
   ];
 
+  constructor(private http: HttpClient) { }
+
   ngOnInit(): void {
-    this.startInitialImage();
+    this.loadMessages();
   }
 
-  // Muestra la imagen inicial por 10 segundos antes del video principal
-  startInitialImage() {
-    this.showInitialImage = true;
-    this.showInitialVideo = false;
-    this.isEditing = false;
-
-    setTimeout(() => {
-      this.showInitialImage = false;
-      this.showInitialVideo = true;
-    }, 5000); // 10 segundos
+  // Cargar los mensajes desde el JSON
+  loadMessages() {
+    this.http.get<any[]>('assets/messages.json').subscribe(data => {
+      this.videoSegments.forEach(segment => {
+        const messageData = data.find(msg => msg.id === segment.id);
+        if (messageData) {
+          segment.title = messageData.title;
+          segment.message = messageData.message;
+        }
+      });
+    });
   }
 
-  // Evento cuando termina un video de segmento
+  // Cuando termina un video
   onSegmentVideoEnd(index: number) {
-    this.videoSegments[index].videoEnded = true;
-    this.videoSegments[index].showMessage = true;
-
-    // Mostrar mensaje por 5 segundos y luego la imagen del segmento
+    this.videoSegments[index].active = false; // Oculta el video
+    this.videoSegments[index].showMessage = true; // Muestra el mensaje
     setTimeout(() => {
-      this.videoSegments[index].showMessage = false;
-      this.videoSegments[index].showImage = true;
-      this.videoSegments[index].active = false;
-
-      // Verificar si todos los segmentos han terminado
-      this.checkForReturnToInitial();
-    }, 5000);
+      this.videoSegments[index].showMessage = false; // Oculta el mensaje
+      this.videoSegments[index].showImage = true; // Muestra la imagen de nuevo
+      this.checkForReturnToInitialImage();
+    }, 5000); // Muestra el mensaje por 5 segundos antes de regresar a la imagen
   }
 
-  // Verifica si todos los segmentos han terminado para regresar al estado inicial
-  checkForReturnToInitial() {
-    const allVideosFinished = this.videoSegments.every(segment => segment.videoEnded);
-    if (!allVideosFinished) {
+  // Regresar a la imagen inicial si todos los videos y mensajes han terminado
+  checkForReturnToInitialImage() {
+    const allInactive = this.videoSegments.every(segment => !segment.active && !segment.showMessage);
+    console.log("allInactive", allInactive)
+    if (allInactive) {
       setTimeout(() => {
-        this.startInitialImage();
-        this.videoSegments.forEach(segment => {
-          segment.videoEnded = false;
-          segment.showImage = false;
-        });
-      }, 5000); // 5 segundos después de que se muestren todas las imágenes
+        // Ocultar todas las imágenes de los segmentos
+        this.videoSegments.forEach(segment => segment.showImage = false);
+        this.videoSegments.forEach(segment => segment.active = false);
+
+        // Mostrar la imagen principal
+        this.showInitialImage = true;
+        this.isEditing = false
+
+      }, 1500);
     }
   }
 
   @HostListener('window:keydown', ['$event'])
   onKeyPress(event: KeyboardEvent) {
-    const key = event.key;
+    if (event.key === '0') {
+      // Bloquear si hay videos o mensajes activos
+      const someActive = this.videoSegments.some(segment => segment.active || segment.showMessage);
+      console.log("someactive", someActive)
+      if (someActive) return;
 
-    if (this.videoSegments.some(segment => segment.active || segment.showMessage)) {
-      return;
-    }
-
-    if (key === '0') {
       this.isEditing = true;
       this.videoSegments.forEach(segment => {
         segment.showImage = true;
         segment.active = false;
-        segment.showMessage = false;
       });
 
-      // Si en 10 segundos no se presiona otra tecla, mostrar el video inicial
       setTimeout(() => {
-        if (!this.videoSegments.some(seg => seg.active)) {
-          this.startInitialImage();
-        }
-      }, 5000);
+        const someActive = this.videoSegments.some(segment => segment.active || segment.showMessage);
+      console.log("someactive2", someActive)
+      if (someActive) return;
+        this.videoSegments.forEach(segment => {
+          segment.showImage = false;
+        });
+        this.isEditing = false;
+        this.showInitialImage = true; // Mostrar la imagen principal
+      }, 10000);
+
     }
 
-    if (['1', '2', '3', '4'].includes(key)) {
+    const key = parseInt(event.key, 10);
+    if (key >= 1 && key <= 4) {
       this.isEditing = true;
-      const index = parseInt(key, 10) - 1;
-
+      const index = key - 1;
       this.videoSegments[index].active = true;
+      this.videoSegments[index].showImage = false;
       this.videoSegments[index].videoEnded = false;
       this.videoSegments[index].showMessage = false;
-      this.videoSegments[index].showImage = false;
-
-      // Los segmentos que no están activos deben mostrar su imagen
-      this.videoSegments.forEach((segment, i) => {
-        if (i !== index && !segment.active) {
-          segment.showImage = true;
-        }
-      });
     }
+
   }
 }

@@ -1,70 +1,100 @@
 .video-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-  }
-  
-  .fullscreen-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .fullscreen-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 1fr;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-  }
-  
-  .video-segment {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .segment-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .segment-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .message {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    z-index: 4;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.video-segment {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: black;
+  /* Asegura que el fondo sea negro cuando no hay video */
+}
+
+.segment-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Esto hace que el video cubra toda la franja sin distorsión */
+}
+
+.fullscreen-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fullscreen-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.video-segment {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.segment-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.segment-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.message-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  z-index: 4;
+}
+
+
+.message-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px; /* Espacio entre el título y el mensaje */
+}
+
+.message-text {
+  font-size: 18px;
+}
