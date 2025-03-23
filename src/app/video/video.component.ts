@@ -12,30 +12,34 @@ export class VideoComponent implements OnInit {
   showInitialImage: boolean = true;
   isEditing: boolean = false;
   videoSegments = [
-    { id: 1, active: false, src: 'assets/video1.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: 'assets/image1.jpeg', title: '', message: '' },
-    { id: 2, active: false, src: 'assets/video2.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: 'assets/image2.jpeg', title: '', message: '' },
-    { id: 3, active: false, src: 'assets/video3.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: 'assets/image3.jpeg', title: '', message: '' },
-    { id: 4, active: false, src: 'assets/video4.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: 'assets/image4.jpeg', title: '', message: '' }
+    { id: 1, active: false, src: 'assets/video1.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: '', videoSrc:'', title: '', message: '' },
+    { id: 2, active: false, src: 'assets/video2.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: '', videoSrc:'', title: '', message: '' },
+    { id: 3, active: false, src: 'assets/video3.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: '', videoSrc:'', title: '', message: '' },
+    { id: 4, active: false, src: 'assets/video4.mp4', videoEnded: false, showMessage: false, showImage: true, imageSrc: '', videoSrc:'', title: '', message: '' }
   ];
 
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.loadMessages();
+    this.loadMultimediaData();
   }
 
-  // Cargar los mensajes desde el JSON
-  loadMessages() {
-    this.http.get<any[]>('assets/messages.json').subscribe(data => {
-      this.videoSegments.forEach(segment => {
-        const messageData = data.find(msg => msg.id === segment.id);
-        if (messageData) {
-          segment.title = messageData.title;
-          segment.message = messageData.message;
-        }
-      });
+ // Cargar los datos de cada franja desde su respectivo JSON
+loadMultimediaData() {
+  this.videoSegments.forEach((segment, index) => {
+    this.http.get<any>(`assets/multimedia_branch${segment.id}.json`).subscribe(data => {
+      segment.title = data.title;
+      segment.message = data.message;
+      segment.imageSrc = this.sanitizeBase64(data.image, 'image/png'); // Convertir imagen base64
+      segment.videoSrc = this.sanitizeBase64(data.video, 'video/mp4'); // Convertir video base64
     });
-  }
+  });
+}
+
+// Método para sanear base64
+sanitizeBase64(base64Data: string, mimeType: string): string {
+  return `data:${mimeType};base64,${base64Data.split(',')[1]}`; 
+}
 
   // Cuando termina un video
   onSegmentVideoEnd(index: number) {
@@ -96,6 +100,11 @@ export class VideoComponent implements OnInit {
     const key = parseInt(event.key, 10);
     if (key >= 1 && key <= 4) {
       this.isEditing = true;
+      this.videoSegments.forEach(segment => {
+        segment.showImage = true;
+        segment.active = false;
+      });
+     
       const index = key - 1;
       this.videoSegments[index].active = true;
       this.videoSegments[index].showImage = false;
